@@ -13,11 +13,6 @@ const getTasks = async (req, res) => {
 // @route   POST /api/tasks
 // @access  Private
 const setTask = async (req, res) => {
-    if (!req.body.text) {
-        res.status(400);
-        throw new Error('Please add a text field');
-    }
-
     const task = await Task.create({
         text: req.body.text,
         user: req.user.id,
