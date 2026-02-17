@@ -56,7 +56,7 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
                         animate={{ opacity: 1, x: 0 }}
                         className="flex items-center gap-2"
                     >
-                        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                        <Link href="/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
                             <div className="w-8 h-8 rounded-lg bg-sky-600 dark:bg-sky-500 flex items-center justify-center">
                                 <Zap size={18} className="text-white fill-current" />
                             </div>
@@ -66,7 +66,7 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
                         </Link>
                     </motion.div>
                 ) : (
-                    <Link href="/" className="w-10 h-10 rounded-xl bg-sky-600 dark:bg-sky-500 flex items-center justify-center mx-auto hover:opacity-80 transition-opacity">
+                    <Link href="/dashboard" className="w-10 h-10 rounded-xl bg-sky-600 dark:bg-sky-500 flex items-center justify-center mx-auto hover:opacity-80 transition-opacity">
                         <Zap size={20} className="text-white fill-current" />
                     </Link>
                 )}

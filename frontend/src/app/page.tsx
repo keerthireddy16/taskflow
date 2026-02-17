@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useAuth } from '../context/AuthContext';
 import Link from 'next/link';
 import {
     ArrowRight,
@@ -18,6 +19,7 @@ import { Card } from '@/components/ui/Card';
 import { motion } from 'framer-motion';
 
 export default function LandingPage() {
+    const { user } = useAuth();
     return (
         <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 selection:bg-zinc-900 selection:text-white dark:selection:bg-white dark:selection:text-zinc-900 overflow-hidden">
             {/* Nav */}
@@ -37,12 +39,22 @@ export default function LandingPage() {
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <Link href="/login">
-                            <Button variant="ghost" className="hidden sm:inline-flex rounded-xl font-bold">Log in</Button>
-                        </Link>
-                        <Link href="/register">
-                            <Button className="rounded-xl px-6 font-bold shadow-xl shadow-zinc-950/10">Get Started</Button>
-                        </Link>
+                        {user ? (
+                            <Link href="/dashboard">
+                                <Button className="rounded-xl px-6 font-bold shadow-xl shadow-zinc-950/10">
+                                    Go to Dashboard
+                                </Button>
+                            </Link>
+                        ) : (
+                            <>
+                                <Link href="/login">
+                                    <Button variant="ghost" className="hidden sm:inline-flex rounded-xl font-bold">Log in</Button>
+                                </Link>
+                                <Link href="/register">
+                                    <Button className="rounded-xl px-6 font-bold shadow-xl shadow-zinc-950/10">Get Started</Button>
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </nav>

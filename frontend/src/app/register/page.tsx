@@ -35,9 +35,9 @@ export default function RegisterPage() {
                 className="w-full max-w-[500px]"
             >
                 <div className="text-center mb-10 space-y-3">
-                    <div className="w-14 h-14 bg-zinc-900 dark:bg-white rounded-2xl flex items-center justify-center mx-auto shadow-2xl shadow-zinc-200 dark:shadow-none">
+                    <Link href="/" className="inline-block w-14 h-14 bg-zinc-900 dark:bg-white rounded-2xl flex items-center justify-center mx-auto shadow-2xl shadow-zinc-200 dark:shadow-none hover:scale-105 transition-transform cursor-pointer">
                         <Zap size={28} className="text-white dark:text-zinc-900 fill-current" />
-                    </div>
+                    </Link>
                     <h1 className="text-3xl font-display font-bold text-zinc-900 dark:text-white mt-4">Create account</h1>
                     <p className="text-zinc-500 font-medium">Start your productivity journey with TaskFlow.</p>
                 </div>
