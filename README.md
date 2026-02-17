@@ -130,8 +130,23 @@ TaskFlow implements enterprise-standard security patterns:
 
 ---
 
-## 📈 Scalability Explanation
+## � Deployment & Updates
 
+This project is configured for **Continuous Deployment**.
+
+1.  **Vercel (Frontend)**: Automatically rebuilds and deploys whenever you push changes to the `main` branch.
+2.  **Render (Backend)**: Automatically redeploys whenever you push changes to the `main` branch.
+
+**To deploy updates:**
+Simply commit and push your changes:
+```bash
+git add .
+git commit -m "your message"
+git push
+```
+*Wait ~2-3 minutes for the changes to go live.*
+
+---
 The application architecture is strictly **Stateless and Decoupled**. By storing session state in JWTs and delivering them via server-managed cookies, the application tier can scale horizontally across multiple instances (e.g., using a Load Balancer and Docker/Kubernetes) without requiring shared session storage or "sticky sessions."
 
 A **Service Layer Pattern** was implemented in the backend to separate request handling from business logic. This modularity ensures that as the codebase grows, adding support for new database types or complex third-party integrations (like WebSockets or Caching layers) requires zero modification to the controller or routing layers. Furthermore, the use of **Axios Interceptors** on the frontend provides a centralized bottleneck for monitoring API latency and handling automated token refreshes or global error redirection in a high-traffic production environment.

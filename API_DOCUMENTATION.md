@@ -1,174 +1,100 @@
 # TaskFlow API Documentation
 
-Base URL: `http://localhost:5000/api`
+Base URL: `https://taskflow-delta.vercel.app/api` (or your backend URL)
 
 ## Authentication
 
-### Register User
-**Endpoint:** `POST /auth/register`
-**Description:** Register a new user and set a secure HttpOnly cookie.
+### Register
+Create a new user account.
+- **URL**: `/auth/register`
+- **Method**: `POST`
+- **Body**:
+  ```json
+  {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "securepassword123"
+  }
+  ```
+- **Response**: `201 Created` - Returns user data and sets HTTP-only cookie.
 
-**Request Body:**
-```json
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "password123"
-}
-```
-
-**Response (201 Created):**
-```json
-{
-  "_id": "60d0fe4f5311236168a109ca",
-  "name": "John Doe",
-  "email": "john@example.com"
-}
-```
-
-### Login User
-**Endpoint:** `POST /auth/login`
-**Description:** Authenticate user and set a secure HttpOnly cookie.
-
-**Request Body:**
-```json
-{
-  "email": "john@example.com",
-  "password": "password123"
-}
-```
-
-**Response (200 OK):**
-```json
-{
-  "_id": "60d0fe4f5311236168a109ca",
-  "name": "John Doe",
-  "email": "john@example.com"
-}
-```
-
-### Logout User
-**Endpoint:** `POST /auth/logout`
-**Description:** Clear the authentication cookie.
-
-**Response (200 OK):**
-```json
-{
-  "message": "Logged out successfully"
-}
-```
+### Login
+Authenticate an existing user.
+- **URL**: `/auth/login`
+- **Method**: `POST`
+- **Body**:
+  ```json
+  {
+    "email": "john@example.com",
+    "password": "securepassword123"
+  }
+  ```
+- **Response**: `200 OK` - Returns user data and sets HTTP-only cookie.
 
 ### Get Current User
-**Endpoint:** `GET /auth/me`
-**Description:** Get the currently authenticated user's profile.
-**Headers:** Cookie containing JWT (automatically sent by browser)
+Get the profile of the currently logged-in user.
+- **URL**: `/auth/me`
+- **Method**: `GET`
+- **Headers**: Cookie (automatically sent by browser)
+- **Response**: `200 OK` - Returns user profile data.
 
-**Response (200 OK):**
-```json
-{
-  "_id": "60d0fe4f5311236168a109ca",
-  "name": "John Doe",
-  "email": "john@example.com"
-}
-```
+### Update Profile
+Update user details.
+- **URL**: `/auth/profile`
+- **Method**: `PUT`
+- **Body**:
+  ```json
+  {
+    "name": "Jane Doe",
+    "email": "jane@example.com",
+    "password": "newpassword123" // Optional
+  }
+  ```
+- **Response**: `200 OK` - Returns updated user data.
 
-### Update User Profile
-**Endpoint:** `PUT /auth/profile`
-**Description:** Update the authenticated user's name, email, or password.
-**Headers:** Cookie containing JWT.
+### Logout
+Clear the authentication cookie.
+- **URL**: `/auth/logout`
+- **Method**: `POST`
+- **Response**: `200 OK` - Clears cookie.
 
-**Request Body:**
-```json
-{
-  "name": "John Updated",
-  "email": "newemail@example.com",
-  "password": "newpassword123"
-}
-```
+---
 
-**Response (200 OK):**
-```json
-{
-  "_id": "60d0fe4f5311236168a109ca",
-  "name": "John Updated",
-  "email": "newemail@example.com"
-}
-```
-
-## Tasks (Sample Entity)
+## Tasks
 
 ### Get All Tasks
-**Endpoint:** `GET /tasks`
-**Description:** Get all tasks for the logged-in user.
-
-**Response (200 OK):**
-```json
-[
-  {
-    "_id": "60d0fe4f5311236168a109cb",
-    "user": "60d0fe4f5311236168a109ca",
-    "text": "Complete the assignment",
-    "completed": false,
-    "createdAt": "2024-02-14T10:00:00.000Z",
-    "updatedAt": "2024-02-14T10:00:00.000Z"
-  }
-]
-```
+Retrieve all tasks for the logged-in user.
+- **URL**: `/tasks`
+- **Method**: `GET`
+- **Response**: `200 OK` - Array of task objects.
 
 ### Create Task
-**Endpoint:** `POST /tasks`
-**Description:** Create a new task.
-
-**Request Body:**
-```json
-{
-  "text": "New Task Item"
-}
-```
-
-**Response (200 OK):**
-```json
-{
-  "_id": "60d0fe4f5311236168a109cc",
-  "user": "60d0fe4f5311236168a109ca",
-  "text": "New Task Item",
-  "completed": false,
-  "createdAt": "2024-02-14T10:05:00.000Z",
-  "updatedAt": "2024-02-14T10:05:00.000Z"
-}
-```
+Add a new task.
+- **URL**: `/tasks`
+- **Method**: `POST`
+- **Body**:
+  ```json
+  {
+    "text": "Complete the assignment"
+  }
+  ```
+- **Response**: `201 Created` - Returns created task object.
 
 ### Update Task
-**Endpoint:** `PUT /tasks/:id`
-**Description:** Update a task's text or completion status.
-
-**Request Body:**
-```json
-{
-  "text": "Updated Task Item",
-  "completed": true
-}
-```
-
-**Response (200 OK):**
-```json
-{
-  "_id": "60d0fe4f5311236168a109cc",
-  "user": "60d0fe4f5311236168a109ca",
-  "text": "Updated Task Item",
-  "completed": true,
-  "createdAt": "2024-02-14T10:05:00.000Z",
-  "updatedAt": "2024-02-14T10:10:00.000Z"
-}
-```
+Update a task's status or text.
+- **URL**: `/tasks/:id`
+- **Method**: `PUT`
+- **Body**:
+  ```json
+  {
+    "text": "Updated task text",     // Optional
+    "completed": true              // Optional
+  }
+  ```
+- **Response**: `200 OK` - Returns updated task.
 
 ### Delete Task
-**Endpoint:** `DELETE /tasks/:id`
-**Description:** Delete a specific task.
-
-**Response (200 OK):**
-```json
-{
-  "id": "60d0fe4f5311236168a109cc"
-}
-```
+Permanently remove a task.
+- **URL**: `/tasks/:id`
+- **Method**: `DELETE`
+- **Response**: `200 OK` - Confirmation message.
