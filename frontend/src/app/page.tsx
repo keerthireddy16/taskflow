@@ -36,7 +36,7 @@ export default function LandingPage() {
                         <a href="#" className="text-sm font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">Features</a>
                         <a href="#" className="text-sm font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">Pricing</a>
                         <a href="#" className="text-sm font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">Resources</a>
-                        <a href="https://github.com/keerthireddy16/taskflow" className="text-sm font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a>
+                        <a href="https://github.com/keerthireddy16/taskflow" target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a>
                     </div>
 
                     <div className="flex items-center gap-3">
