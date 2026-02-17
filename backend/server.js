@@ -32,6 +32,10 @@ app.get('/', (req, res) => {
     res.send('API is running...');
 });
 
+app.get('/test', (req, res) => {
+    res.send('Test route working');
+});
+
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/tasks', require('./routes/taskRoutes'));
 
