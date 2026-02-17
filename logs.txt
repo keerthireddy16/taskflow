@@ -1,0 +1,24 @@
+[BACKEND LOGS - CAPTURED AUTOMATICALLY]
+> nodemon server.js
+[nodemon] 3.1.11
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,cjs,json
+[nodemon] starting `node server.js`
+[dotenv@17.3.1] injecting env (3) from .env
+Server running on port 5000
+MongoDB Connected: ac-1ldajrs-shard-00-02.gkiypey.mongodb.net
+
+--- Login Attempt ---
+Email: admin@example.com
+GET /api/auth/me
+GET /api/tasks
+
+==================================================
+
+✓ Ready in 1288ms
+ GET / 200 in 1327ms (compile: 687ms, render: 639ms)
+ GET / 200 in 216ms (compile: 11ms, render: 205ms)
+ GET /login 200 in 144ms (compile: 92ms, render: 53ms)
+ GET /dashboard 200 in 164ms (compile: 95ms, render: 70ms)
+ GET /dashboard 200 in 42ms (compile: 8ms, render: 34ms)
