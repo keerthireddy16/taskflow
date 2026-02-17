@@ -1,41 +1,56 @@
-const Task = require('../models/Task');
-const User = require('../models/User');
+const asyncHandler = require('express-async-handler');
+const taskService = require('../services/taskService');
 
 // @desc    Get tasks
 // @route   GET /api/tasks
 // @access  Private
-const getTasks = async (req, res) => {
-    const tasks = await Task.find({ user: req.user.id });
-    res.status(200).json(tasks);
-};
+const getTasks = asyncHandler(async (req, res) => {
+    const tasks = await taskService.getUserTasks(req.user.id);
+    res.status(200).json({
+        success: true,
+        data: tasks
+    });
+});
 
 // @desc    Set task
 // @route   POST /api/tasks
 // @access  Private
-const setTask = async (req, res) => {
-    const task = await Task.create({
-        text: req.body.text,
-        user: req.user.id,
-    });
+const setTask = asyncHandler(async (req, res) => {
+    console.log('--- Task Creation Attempt ---');
+    console.log('Body:', req.body);
+    console.log('User ID from token:', req.user?._id);
 
-    res.status(200).json(task);
-};
+    if (!req.body.text) {
+        res.status(400);
+        throw new Error('Please add a text field');
+    }
+
+    try {
+        const task = await taskService.createTask({
+            text: req.body.text,
+            user: req.user._id,
+        });
+
+        res.status(201).json({
+            success: true,
+            data: task
+        });
+    } catch (error) {
+        console.error('Task Creation Error:', error);
+        res.status(500);
+        throw new Error('Server error adding task');
+    }
+});
 
 // @desc    Update task
 // @route   PUT /api/tasks/:id
 // @access  Private
-const updateTask = async (req, res) => {
-    const task = await Task.findById(req.params.id);
+const updateTask = asyncHandler(async (req, res) => {
+    const task = await taskService.getTaskById(req.params.id);
 
     if (!task) {
-        res.status(400);
+        res.status(404);
         throw new Error('Task not found');
-    }
-
-    // Check for user
-    if (!req.user) {
-        res.status(401);
-        throw new Error('User not found');
     }
 
     // Make sure the logged in user matches the task user
@@ -44,28 +59,23 @@ const updateTask = async (req, res) => {
         throw new Error('User not authorized');
     }
 
-    const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-    });
+    const updatedTask = await taskService.updateTaskById(req.params.id, req.body);
 
-    res.status(200).json(updatedTask);
-};
+    res.status(200).json({
+        success: true,
+        data: updatedTask
+    });
+});
 
 // @desc    Delete task
 // @route   DELETE /api/tasks/:id
 // @access  Private
-const deleteTask = async (req, res) => {
-    const task = await Task.findById(req.params.id);
+const deleteTask = asyncHandler(async (req, res) => {
+    const task = await taskService.getTaskById(req.params.id);
 
     if (!task) {
-        res.status(400);
+        res.status(404);
         throw new Error('Task not found');
-    }
-
-    // Check for user
-    if (!req.user) {
-        res.status(401);
-        throw new Error('User not found');
     }
 
     // Make sure the logged in user matches the task user
@@ -74,10 +84,13 @@ const deleteTask = async (req, res) => {
         throw new Error('User not authorized');
     }
 
-    await task.deleteOne();
+    await taskService.deleteTaskById(req.params.id);
 
-    res.status(200).json({ id: req.params.id });
-};
+    res.status(200).json({
+        success: true,
+        data: { id: req.params.id }
+    });
+});
 
 module.exports = {
     getTasks,

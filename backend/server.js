@@ -2,15 +2,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
-const dotenv = require('dotenv');
-
-dotenv.config();
+const cookieParser = require('cookie-parser');
+const config = require('./config/config');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = config.PORT;
 
 // Middleware
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+});
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true
