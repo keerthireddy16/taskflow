@@ -1,15 +1,16 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends HTMLMotionProps<"button"> {
     variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
     size?: 'sm' | 'md' | 'lg';
     loading?: boolean;
     icon?: React.ReactNode;
+    children?: React.ReactNode;
 }
 
-export const Button = ({
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
     children,
     variant = 'primary',
     size = 'md',
@@ -18,7 +19,7 @@ export const Button = ({
     className,
     disabled,
     ...props
-}: ButtonProps) => {
+}, ref) => {
     const variants = {
         primary: 'bg-sky-600 text-white dark:bg-sky-500 dark:text-white shadow-sm hover:shadow-md hover:opacity-90',
         secondary: 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700',
@@ -34,6 +35,7 @@ export const Button = ({
 
     return (
         <motion.button
+            ref={ref}
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.98 }}
             className={cn(
@@ -53,4 +55,6 @@ export const Button = ({
             {children}
         </motion.button>
     );
-};
+});
+
+Button.displayName = "Button";
