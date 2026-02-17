@@ -52,7 +52,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
         >
           <div className="w-12 h-12 border-4 border-slate-800 border-t-blue-600 rounded-full animate-spin" />
           <span className="text-slate-500 font-bold uppercase tracking-widest text-xs">
-            {showSlowLoadingMessage ? "Waking up server (this may take a minute)..." : "Initializing TaskFlow"}
+            {showSlowLoadingMessage ? "Server is waking up. Please refresh the page if this persists." : "Initializing TaskFlow"}
           </span>
         </motion.div>
       </div>
