@@ -6,6 +6,8 @@ TaskFlow is a robust, full-stack productivity application featuring Drag & Drop 
 
 **Live Demo:** [https://taskflow-delta.vercel.app/](https://taskflow-delta.vercel.app/)
 
+ Note: Due to Render's free-tier cold start behavior, the backend may take a few seconds to respond on the first request. If the login/register page appears delayed initially, a quick refresh resolves it.
+
 ---
 
 ## 🚀 Features Checklist (Assignment Deliverables)
