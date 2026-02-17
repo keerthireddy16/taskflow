@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const checkUserLoggedIn = useCallback(async () => {
         // Set a timeout to avoid infinite loading if backend sleeps
         const timeout = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error('Timeout')), 5000)
+            setTimeout(() => reject(new Error('Timeout')), 10000)
         );
 
         try {

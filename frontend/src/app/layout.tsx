@@ -32,16 +32,28 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   const isPublicPage = pathname === '/' || pathname === '/login' || pathname === '/register';
 
+  const [showSlowLoadingMessage, setShowSlowLoadingMessage] = useState(false);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (loading) {
+      timer = setTimeout(() => setShowSlowLoadingMessage(true), 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [loading]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-950">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center gap-4"
+          className="flex flex-col items-center gap-4 text-center px-4"
         >
-          <div className="w-12 h-12 border-4 border-slate-800 border-t-sky-500 rounded-full animate-spin" />
-          <span className="text-slate-500 font-bold uppercase tracking-widest text-xs">Initializing TaskFlow</span>
+          <div className="w-12 h-12 border-4 border-slate-800 border-t-blue-600 rounded-full animate-spin" />
+          <span className="text-slate-500 font-bold uppercase tracking-widest text-xs">
+            {showSlowLoadingMessage ? "Waking up server (this may take a minute)..." : "Initializing TaskFlow"}
+          </span>
         </motion.div>
       </div>
     );
