@@ -28,8 +28,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
 
     const checkUserLoggedIn = useCallback(async () => {
+        // Set a timeout to avoid infinite loading if backend sleeps
+        const timeout = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Timeout')), 5000)
+        );
+
         try {
-            const { data } = await api.get('/auth/me');
+            // Race the API call against the timeout
+            const { data } = await Promise.race([
+                api.get('/auth/me'),
+                timeout
+            ]) as any;
+
             setUser(data.data);
         } catch (error) {
             setUser(null);

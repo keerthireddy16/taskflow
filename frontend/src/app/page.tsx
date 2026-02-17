@@ -26,16 +26,17 @@ export default function LandingPage() {
             <nav className="fixed top-0 inset-x-0 z-50 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl border-b border-zinc-200/50 dark:border-zinc-800/50 h-20 flex items-center">
                 <div className="container max-w-7xl mx-auto px-6 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="w-9 h-9 bg-zinc-900 dark:bg-white rounded-xl flex items-center justify-center">
-                            <Zap size={20} className="text-white dark:text-zinc-900 fill-current" />
+                        <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
+                            <Zap size={20} className="text-white fill-current" />
                         </div>
                         <span className="text-xl font-display font-bold text-zinc-900 dark:text-white tracking-tighter">TaskFlow</span>
                     </div>
 
                     <div className="hidden md:flex items-center gap-8">
-                        {['Features', 'Pricing', 'Resources', 'About'].map((item) => (
-                            <a key={item} href="#" className="text-sm font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">{item}</a>
-                        ))}
+                        <a href="#" className="text-sm font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">Features</a>
+                        <a href="#" className="text-sm font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">Pricing</a>
+                        <a href="#" className="text-sm font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">Resources</a>
+                        <a href="https://github.com/keerthireddy16/taskflow" className="text-sm font-bold text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a>
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -148,7 +149,9 @@ export default function LandingPage() {
             <footer className="py-12 border-t border-zinc-200/50 dark:border-zinc-800/50 px-6">
                 <div className="container max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
                     <div className="flex items-center gap-2">
-                        <Zap size={18} className="text-zinc-900 dark:text-white fill-current" />
+                        <div className="w-6 h-6 rounded-md bg-blue-600 flex items-center justify-center">
+                            <Zap size={14} className="text-white fill-current" />
+                        </div>
                         <span className="text-lg font-display font-bold tracking-tighter">TaskFlow</span>
                     </div>
 

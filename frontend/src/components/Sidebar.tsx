@@ -16,7 +16,8 @@ import {
     Sun,
     Moon,
     X,
-    Menu
+    Menu,
+    Home // Import Home icon
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
@@ -39,6 +40,7 @@ export default function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobile
     if (!user) return null;
 
     const navItems = [
+        { label: 'Home', href: 'https://taskflow-delta.vercel.app/', icon: Home, external: true }, // Add Home Link
         { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
         { label: 'Tasks', href: '/dashboard?view=tasks', icon: CheckSquare },
         { label: 'Analytics', href: '#', icon: BarChart3, onClick: () => toast.info('Analytics coming soon!') },
@@ -73,8 +75,8 @@ export default function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobile
                             animate={{ opacity: 1, x: 0 }}
                             className="flex items-center gap-2"
                         >
-                            <Link href="/dashboard" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                                <div className="w-8 h-8 rounded-lg bg-sky-600 dark:bg-sky-500 flex items-center justify-center">
+                            <Link href="https://taskflow-delta.vercel.app/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                                <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
                                     <Zap size={18} className="text-white fill-current" />
                                 </div>
                                 <span className="text-xl font-display font-bold text-slate-900 dark:text-white tracking-tight">
@@ -83,7 +85,7 @@ export default function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobile
                             </Link>
                         </motion.div>
                     ) : (
-                        <Link href="/dashboard" className="w-10 h-10 rounded-xl bg-sky-600 dark:bg-sky-500 flex items-center justify-center mx-auto hover:opacity-80 transition-opacity">
+                        <Link href="https://taskflow-delta.vercel.app/" className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center mx-auto hover:opacity-80 transition-opacity">
                             <Zap size={20} className="text-white fill-current" />
                         </Link>
                     )}
@@ -140,6 +142,30 @@ export default function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobile
                             );
                         }
 
+                        // External Link for Home
+                        if (item.external) {
+                            return (
+                                <Link
+                                    key={item.label}
+                                    href={item.href}
+                                    onClick={() => setMobileOpen(false)}
+                                    className={cn(
+                                        'flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group relative',
+                                        // Highlight if exactly matching current URL (unlikely for external) or manually if needed
+                                        'text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-900/50'
+                                    )}
+                                >
+                                    <Icon
+                                        size={20}
+                                        className="transition-transform duration-300 group-hover:scale-110"
+                                    />
+                                    {(!collapsed || mobileOpen) && (
+                                        <span className="text-sm font-semibold tracking-tight">{item.label}</span>
+                                    )}
+                                </Link>
+                            );
+                        }
+
                         return (
                             <Link
                                 key={item.label}
@@ -148,7 +174,7 @@ export default function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobile
                                 className={cn(
                                     'flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group relative',
                                     isActive
-                                        ? 'bg-sky-600 dark:bg-sky-500 text-white shadow-xl shadow-sky-200 dark:shadow-none'
+                                        ? 'bg-blue-600 dark:bg-blue-500 text-white shadow-xl shadow-blue-200 dark:shadow-none'
                                         : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-900/50'
                                 )}
                             >
@@ -165,7 +191,7 @@ export default function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobile
                                 {isActive && (
                                     <motion.div
                                         layoutId="active-pill"
-                                        className="absolute -left-1 w-1 h-6 bg-sky-600 dark:bg-sky-400 rounded-full"
+                                        className="absolute -left-1 w-1 h-6 bg-blue-600 dark:bg-blue-400 rounded-full"
                                     />
                                 )}
                             </Link>

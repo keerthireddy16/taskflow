@@ -48,7 +48,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 font-sans selection:bg-sky-500 selection:text-white dark:selection:bg-sky-900 dark:selection:text-sky-50">
+    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 font-sans selection:bg-blue-500 selection:text-white dark:selection:bg-blue-900 dark:selection:text-blue-50">
       {!isPublicPage && user && (
         <Sidebar
           collapsed={collapsed}
@@ -64,7 +64,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
         {!isPublicPage && user && (
           <div className="md:hidden h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 backdrop-blur-xl sticky top-0 z-30">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-sky-600 dark:bg-sky-500 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
                 <Zap size={18} className="text-white fill-current" />
               </div>
               <span className="text-lg font-display font-bold text-slate-900 dark:text-white tracking-tight">TaskFlow</span>

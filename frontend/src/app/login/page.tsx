@@ -28,6 +28,17 @@ export default function LoginPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 relative">
+            {/* Home Link */}
+            <Link
+                href="https://taskflow-delta.vercel.app/"
+                className="absolute top-8 left-8 p-3 rounded-xl bg-white/50 dark:bg-black/20 hover:bg-white dark:hover:bg-black/40 backdrop-blur-md transition-all text-zinc-500 hover:text-blue-600 dark:text-zinc-400 dark:hover:text-blue-400 flex items-center gap-2 group"
+            >
+                <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Zap size={16} className="text-white fill-current" />
+                </div>
+                <span className="font-bold hidden sm:inline-block">Home</span>
+            </Link>
+
             <button
                 onClick={(e) => toggleTheme(e)}
                 className="absolute top-8 right-8 p-3 rounded-xl bg-white/50 dark:bg-black/20 hover:bg-white dark:hover:bg-black/40 backdrop-blur-md transition-all text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
