@@ -19,8 +19,12 @@ export default function RegisterPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        await register(name, email, password);
-        setLoading(false);
+        const success = await register(name, email, password);
+        if (!success) {
+            setLoading(false);
+        }
+        // If success, router.push in AuthContext handles redirect, 
+        // and we keep loading true to prevent UI flicker
     };
 
     return (

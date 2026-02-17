@@ -14,8 +14,8 @@ interface User {
 interface AuthContextType {
     user: User | null;
     loading: boolean;
-    login: (email: string, password: string) => Promise<void>;
-    register: (name: string, email: string, password: string) => Promise<void>;
+    login: (email: string, password: string) => Promise<boolean>;
+    register: (name: string, email: string, password: string) => Promise<boolean>;
     logout: () => Promise<void>;
     updateProfile: (userData: Partial<User>) => Promise<boolean>;
 }
@@ -67,8 +67,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setUser(data.data);
             router.push('/dashboard');
             toast.success('Welcome back to TaskFlow!');
+            return true;
         } catch (error: any) {
             toast.error(error.response?.data?.message || 'Login failed');
+            return false;
         }
     };
 
@@ -78,8 +80,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setUser(data.data);
             router.push('/dashboard');
             toast.success('Registration successful. Welcome!');
+            return true;
         } catch (error: any) {
             toast.error(error.response?.data?.message || 'Registration failed');
+            return false;
         }
     };
 
