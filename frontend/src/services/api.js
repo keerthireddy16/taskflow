@@ -8,6 +8,8 @@ const api = axios.create({
     },
 });
 
+console.log('API Base URL:', process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api');
+
 // Add a request interceptor
 api.interceptors.request.use(
     (config) => {
