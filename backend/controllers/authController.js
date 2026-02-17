@@ -132,8 +132,8 @@ const generateToken = (res, id) => {
 
     res.cookie('jwt', token, {
         httpOnly: true,
-        secure: config.NODE_ENV !== 'development',
-        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production', // Must be true for sameSite: 'none'
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Allow cross-site in production
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 };
