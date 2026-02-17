@@ -35,6 +35,8 @@ interface Task {
     createdAt: string;
 }
 
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
+
 export default function Dashboard() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
@@ -91,10 +93,15 @@ export default function Dashboard() {
     };
 
     const toggleComplete = async (task: Task) => {
+        // Optimistic update
+        const updatedTask = { ...task, completed: !task.completed };
+        setTasks((prev) => prev.map((t) => (t._id === task._id ? updatedTask : t)));
+
         try {
-            const { data } = await api.put(`/tasks/${task._id}`, { completed: !task.completed });
-            setTasks((prev) => prev.map((t) => (t._id === task._id ? data.data : t)));
+            await api.put(`/tasks/${task._id}`, { completed: !task.completed });
         } catch (error) {
+            // Revert on failure
+            setTasks((prev) => prev.map((t) => (t._id === task._id ? task : t)));
             toast.error('Failed to update task');
         }
     };
@@ -119,6 +126,36 @@ export default function Dashboard() {
             toast.success('Changes saved');
         } catch (error) {
             toast.error('Update failed');
+        }
+    };
+
+    const onDragEnd = async (result: DropResult) => {
+        const { source, destination, draggableId } = result;
+
+        if (!destination) return;
+
+        // If dropped in the same column, do nothing (sorting not implemented yet)
+        if (source.droppableId === destination.droppableId) return;
+
+        // Find the task
+        const task = tasks.find((t) => t._id === draggableId);
+        if (!task) return;
+
+        // Determine new status based on destination column ID
+        const newCompleted = destination.droppableId === 'completed';
+
+        // Optimistic update
+        const updatedTask = { ...task, completed: newCompleted };
+        setTasks((prev) => prev.map((t) => (t._id === draggableId ? updatedTask : t)));
+
+        // API Call
+        try {
+            await api.put(`/tasks/${draggableId}`, { completed: newCompleted });
+            toast.success(newCompleted ? 'Task completed!' : 'Task reactivated');
+        } catch (error) {
+            // Revert
+            setTasks((prev) => prev.map((t) => (t._id === draggableId ? task : t)));
+            toast.error('Failed to move task');
         }
     };
 
@@ -169,7 +206,7 @@ export default function Dashboard() {
                     >
                         {viewMode === 'list' ? 'Board View' : 'List View'}
                     </Button>
-                    <Button icon={<Plus size={18} />} className="shadow-lg shadow-zinc-950/10 rounded-2xl">New Project</Button>
+                    {/* "New Project" button removed as per user request */}
                 </div>
             </header>
 
@@ -298,23 +335,27 @@ export default function Dashboard() {
                             </AnimatePresence>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
-                            <BoardColumn
-                                title="Pending"
-                                tasks={filteredTasks.filter(t => !t.completed)}
-                                onToggle={toggleComplete}
-                                onDelete={setConfirmDeleteId}
-                                onEdit={setEditingTask}
-                            />
-                            <BoardColumn
-                                title="Completed"
-                                tasks={filteredTasks.filter(t => t.completed)}
-                                onToggle={toggleComplete}
-                                onDelete={setConfirmDeleteId}
-                                onEdit={setEditingTask}
-                                isCompleted
-                            />
-                        </div>
+                        <DragDropContext onDragEnd={onDragEnd}>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
+                                <BoardColumn
+                                    title="Pending"
+                                    id="pending"
+                                    tasks={filteredTasks.filter(t => !t.completed)}
+                                    onToggle={toggleComplete}
+                                    onDelete={setConfirmDeleteId}
+                                    onEdit={setEditingTask}
+                                />
+                                <BoardColumn
+                                    title="Completed"
+                                    id="completed"
+                                    tasks={filteredTasks.filter(t => t.completed)}
+                                    onToggle={toggleComplete}
+                                    onDelete={setConfirmDeleteId}
+                                    onEdit={setEditingTask}
+                                    isCompleted
+                                />
+                            </div>
+                        </DragDropContext>
                     )}
                 </div>
             </section>
@@ -458,59 +499,73 @@ function TaskItem({ task, onToggle, onDelete, onEdit }: any) {
     );
 }
 
-function BoardColumn({ title, tasks, onToggle, onDelete, onEdit, isCompleted }: any) {
+function BoardColumn({ title, id, tasks, onToggle, onDelete, onEdit, isCompleted }: any) {
     return (
-        <div className="space-y-4">
-            <div className="flex items-center justify-between px-2">
-                <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400 flex items-center gap-2">
-                    {title}
-                    <span className="text-[10px] bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-full">{tasks.length}</span>
-                </h3>
-            </div>
-            <div className="space-y-4 min-h-[200px] p-2 rounded-3xl bg-zinc-100/30 dark:bg-zinc-900/10 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 transition-colors">
-                {tasks.map((task: any) => (
-                    <motion.div
-                        key={task._id}
-                        layout
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                    >
-                        <Card className={cn(
-                            "p-4 space-y-3 cursor-grab active:cursor-grabbing hover:shadow-lg transition-all border-none ring-1 ring-zinc-200 dark:ring-zinc-800",
-                            isCompleted && "bg-zinc-50/50 dark:bg-zinc-950/20"
-                        )}>
-                            <p className={cn(
-                                "text-sm font-bold leading-relaxed",
-                                isCompleted && "text-zinc-400 line-through decoration-zinc-300"
-                            )}>
-                                {task.text}
-                            </p>
-                            <div className="flex items-center justify-between pt-2">
-                                <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">
-                                    {new Date(task.createdAt).toLocaleDateString()}
-                                </span>
-                                <div className="flex items-center gap-0.5">
-                                    <button onClick={() => onToggle(task)} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
-                                        {isCompleted ? <X size={14} /> : <Check size={14} />}
-                                    </button>
-                                    <button onClick={() => onEdit(task)} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
-                                        <Edit3 size={14} />
-                                    </button>
-                                    <button onClick={() => onDelete(task._id)} className="p-1.5 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg text-zinc-400 hover:text-red-500 transition-colors">
-                                        <Trash2 size={14} />
-                                    </button>
-                                </div>
-                            </div>
-                        </Card>
-                    </motion.div>
-                ))}
-                {tasks.length === 0 && (
-                    <div className="h-32 border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-2xl flex items-center justify-center">
-                        <p className="text-[10px] font-bold text-zinc-300 uppercase tracking-widest">Empty</p>
+        <Droppable droppableId={id}>
+            {(provided) => (
+                <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="space-y-4"
+                >
+                    <div className="flex items-center justify-between px-2">
+                        <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-400 flex items-center gap-2">
+                            {title}
+                            <span className="text-[10px] bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-full">{tasks.length}</span>
+                        </h3>
                     </div>
-                )}
-            </div>
-        </div>
+                    <div className="space-y-4 min-h-[200px] p-2 rounded-3xl bg-zinc-100/30 dark:bg-zinc-900/10 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 transition-colors">
+                        {tasks.map((task: any, index: number) => (
+                            <Draggable key={task._id} draggableId={task._id} index={index}>
+                                {(provided, snapshot) => (
+                                    <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        style={{ ...provided.draggableProps.style }}
+                                        className={snapshot.isDragging ? "opacity-90 scale-105 z-50" : ""}
+                                    >
+                                        <Card className={cn(
+                                            "p-4 space-y-3 cursor-grab active:cursor-grabbing hover:shadow-lg transition-all border-none ring-1 ring-zinc-200 dark:ring-zinc-800",
+                                            isCompleted && "bg-zinc-50/50 dark:bg-zinc-950/20"
+                                        )}>
+                                            <p className={cn(
+                                                "text-sm font-bold leading-relaxed",
+                                                isCompleted && "text-zinc-400 line-through decoration-zinc-300"
+                                            )}>
+                                                {task.text}
+                                            </p>
+                                            <div className="flex items-center justify-between pt-2">
+                                                <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">
+                                                    {new Date(task.createdAt).toLocaleDateString()}
+                                                </span>
+                                                <div className="flex items-center gap-0.5">
+                                                    <button onClick={() => onToggle(task)} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                                                        {isCompleted ? <X size={14} /> : <Check size={14} />}
+                                                    </button>
+                                                    <button onClick={() => onEdit(task)} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                                                        <Edit3 size={14} />
+                                                    </button>
+                                                    <button onClick={() => onDelete(task._id)} className="p-1.5 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg text-zinc-400 hover:text-red-500 transition-colors">
+                                                        <Trash2 size={14} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    </div>
+                                )}
+                            </Draggable>
+                        ))}
+                        {provided.placeholder}
+                        {tasks.length === 0 && (
+                            <div className="h-32 border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-2xl flex items-center justify-center">
+                                <p className="text-[10px] font-bold text-zinc-300 uppercase tracking-widest">Empty</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+        </Droppable>
     );
 }
 

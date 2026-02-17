@@ -22,9 +22,12 @@ const outfit = Outfit({
   subsets: ["latin"],
 });
 
+import { Menu, Zap } from 'lucide-react'; // Import Menu Icon and Zap
+
 function AppContent({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false); // Mobile State
   const pathname = usePathname();
 
   const isPublicPage = pathname === '/' || pathname === '/login' || pathname === '/register';
@@ -46,9 +49,33 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 font-sans selection:bg-sky-500 selection:text-white dark:selection:bg-sky-900 dark:selection:text-sky-50">
-      {!isPublicPage && user && <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />}
+      {!isPublicPage && user && (
+        <Sidebar
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+          mobileOpen={mobileOpen}
+          setMobileOpen={setMobileOpen}
+        />
+      )}
+
       <main className={`flex-1 transition-all duration-500 ease-in-out ${!isPublicPage && user ? (collapsed ? 'lg:pl-20' : 'lg:pl-64') : ''}`}>
-        <div className={!isPublicPage && user ? "container p-6 md:p-10 max-w-7xl mx-auto min-h-screen" : "min-h-screen bg-white dark:bg-slate-950"}>
+
+        {/* Mobile Header (Only visible on small screens when logged in) */}
+        {!isPublicPage && user && (
+          <div className="md:hidden h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 backdrop-blur-xl sticky top-0 z-30">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-sky-600 dark:bg-sky-500 flex items-center justify-center">
+                <Zap size={18} className="text-white fill-current" />
+              </div>
+              <span className="text-lg font-display font-bold text-slate-900 dark:text-white tracking-tight">TaskFlow</span>
+            </div>
+            <button onClick={() => setMobileOpen(true)} className="p-2 text-slate-500 hover:text-slate-900 dark:hover:text-white">
+              <Menu size={24} />
+            </button>
+          </div>
+        )}
+
+        <div className={!isPublicPage && user ? "container p-4 md:p-10 max-w-7xl mx-auto min-h-[calc(100vh-4rem)] md:min-h-screen" : "min-h-screen bg-white dark:bg-slate-950"}>
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}

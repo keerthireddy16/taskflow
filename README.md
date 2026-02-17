@@ -1,36 +1,32 @@
 # TaskFlow: Professional Task Management Ecosystem
 
-TaskFlow is a high-performance, full-stack task management platform architected for security, scalability, and maintainability. It demonstrates a production-ready implementation of the **MERN (MongoDB, Express, React, Node.js)** stack, featuring a unified service-oriented backend and a refined Next.js 14 frontend.
+# TaskFlow - Modern Productivity Dashboard
+
+TaskFlow is a robust, full-stack productivity application featuring Drag & Drop task management, JWT authentication, and a premium responsive design. Built for the Frontend Developer Intern assignment.
+
+**Live Demo:** [https://taskflow-delta.vercel.app/](https://taskflow-delta.vercel.app/)
 
 ---
 
-## ⚡ Quick Start (How to Run)
+## 🚀 Features Checklist (Assignment Deliverables)
 
-This is a full-stack application. You need to run the **Backend** and **Frontend** in **two separate terminals**.
-
-### Terminal 1: Backend
-```bash
-cd backend
-npm run dev
-# Server starts on http://localhost:5000
-```
-
-### Terminal 2: Frontend
-```bash
-cd frontend
-npm run dev
-# App starts on http://localhost:3000
-```
+- [x] **Frontend**: Built with **Next.js 14**, **TailwindCSS**, and **TypeScript**.
+- [x] **Responsive Design**: Fully optimized for Mobile, Tablet, and Desktop.
+- [x] **Authentication**:
+    -   Secure **JWT-based** Login & Registration.
+    -   **Protected Routes** (Dashboard requires login).
+    -   10-minute **Inactivity Auto-Logout**.
+- [x] **Dashboard**:
+    -   **Drag & Drop** Kanban Board (Pending <-> Completed).
+    -   **CRUD Operations**: Create, Read, Update, Delete tasks.
+    -   **Search & Filter**: Real-time filtering by status and text.
+    -   **User Profile**: Display dynamic user name/email.
+- [x] **Backend**:
+    -   **Node.js & Express** API.
+    -   **MongoDB** Database with Mongoose schemas.
+    -   **Security**: bcrypt password hashing, HTTP-only cookies, CORS protection.
 
 ---
-
-## 🚀 Key Features
-
-*   **Premium SaaS UI**: Minimalist, high-contrast dark theme inspired by Linear and Vercel.
-*   **Secure Cookie-Based Auth**: Utilizes `HttpOnly` and `SameSite: Strict` cookies for JWT storage, providing superior protection against XSS attacks.
-*   **Service-Oriented Architecture**: Clean separation of concerns with a dedicated Service Layer for database operations and business logic.
-*   **Global Error Handling**: Standardized API response format and automated Axios interceptors for a resilient user experience.
-*   **Real-time CRUD**: Fluid task management with live searching, status filtering, and dynamic statistics.
 
 ## 🛠️ Tech Stack
 

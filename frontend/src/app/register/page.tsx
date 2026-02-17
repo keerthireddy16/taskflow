@@ -9,8 +9,14 @@ import { Mail, Lock, User, UserPlus, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
+import { useTheme } from '../../context/ThemeContext';
+import { Sun, Moon } from 'lucide-react';
+
 export default function RegisterPage() {
     const { register } = useAuth();
+    const { theme, toggleTheme } = useTheme();
+
+    // ... rest of state
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -28,7 +34,21 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950 p-4">
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 relative">
+            <button
+                onClick={(e) => toggleTheme(e)}
+                className="absolute top-8 right-8 p-3 rounded-xl bg-white/50 dark:bg-black/20 hover:bg-white dark:hover:bg-black/40 backdrop-blur-md transition-all text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+            >
+                <motion.div
+                    key={theme}
+                    initial={{ rotate: -180, scale: 0.8, opacity: 0 }}
+                    animate={{ rotate: 0, scale: 1.1, opacity: 1 }}
+                    exit={{ rotate: 180, scale: 0.8, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                >
+                    {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                </motion.div>
+            </button>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
