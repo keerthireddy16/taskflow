@@ -8,6 +8,9 @@ TaskFlow is a robust, full-stack productivity application featuring Drag & Drop 
 
  Note: Due to Render's free-tier cold start behavior, the backend may take a few seconds to respond on the first request. If the login/register page appears delayed initially, a quick refresh resolves it.
 
+⚡ Recommended: Run Locally (Full Experience)
+This is a full-stack application.
+You must run Backend and Frontend in two separate terminals
 ---
 
 ## 🚀 Features Checklist (Assignment Deliverables)
