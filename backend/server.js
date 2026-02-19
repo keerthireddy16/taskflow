@@ -15,8 +15,21 @@ app.use((req, res, next) => {
 });
 app.use(express.json());
 app.use(cookieParser());
+const allowedOrigins = [
+    'http://localhost:3000',
+    'https://taskflow-delta.vercel.app',
+    process.env.CLIENT_URL
+].filter(Boolean);
+
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            console.log('Blocked by CORS:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
