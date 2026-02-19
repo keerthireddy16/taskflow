@@ -1,16 +1,58 @@
 # TaskFlow: Frontend Developer Intern Assignment
 
-> [!IMPORTANT]
-> **⚠️ PLEASE RUN LOCALLY (DO NOT USE LIVE DEMO)**
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=vercel)](https://taskflow-delta.vercel.app/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-blue?style=for-the-badge&logo=github)](https://github.com/keerthireddy16/taskflow)
+
+> **🚀 Live Demo:** [https://taskflow-delta.vercel.app/](https://taskflow-delta.vercel.app/)
 >
-> The live deployment may experience timeouts or require frequent refreshing due to free-tier hosting limits.
-> **Please run the project locally** using the instructions below for the intended full-stack experience.
+> *Note: Hosted on free-tier services. Please allow up to 30 seconds for the backend to wake up on the first request.*
 
- Note: Due to Render's free-tier cold start behavior, the backend may take a few seconds to respond on the first request. If the login/register page appears delayed initially, a quick refresh resolves it.
+---
 
-⚡ Recommended: Run Locally (Full Experience)
-This is a full-stack application.
-You must run Backend and Frontend in two separate terminals
+## 📋 Assignment Overview
+**Role:** Frontend Developer Intern
+**Objective:** Build a Scalable Web App with Authentication & Dashboard + Basic Backend.
+
+This project demonstrates a production-ready, full-stack application built with **Next.js 14** (Frontend) and **Node.js/Express** (Backend), deployed on **Vercel** and **Render**.
+
+## 📤 Submission & Project Logs
+This repository contains all required deliverables for the **Frontend Developer Intern** task:
+-   **Source Code**: Complete frontend and backend source.
+-   **Project Log**: Development diary and technical decisions in [PROJECT_LOG.md](./PROJECT_LOG.md).
+-   **API Docs**: Endpoints detailed in [API_DOCUMENTATION.md](./API_DOCUMENTATION.md).
+-   **Live Demo**: [taskflow-delta.vercel.app](https://taskflow-delta.vercel.app/)
+
+---
+
+## ✅ Core Features Implemented
+
+### 🎨 Frontend (Primary Focus)
+-   **Modern Tech Stack**: Built with **Next.js 14 (App Router)** & **TypeScript**.
+-   **Responsive Design**: Mobile-first UI using **TailwindCSS** (Fully responsive Sidebar & Dashboard).
+-   **Forms & Validation**:
+    -   Client-side validation with `react-hook-form`.
+    -   Server-side validation with `express-validator`.
+-   **Protected Routes**: Higher-Order Component protection for Dashboard & Profile pages.
+
+### ⚙️ Backend (Supportive)
+-   **API**: RESTful API built with **Node.js** & **Express**.
+-   **Database**: **MongoDB Atlas** connection with Mongoose ODM.
+-   **Authentication**: Secure **JWT-based** auth (HttpOnly Cookies).
+-   **CRUD Operations**: Full Create, Read, Update, Delete access for Tasks.
+
+### 📊 Dashboard Features
+-   **User Profile**: Fetch and update user details (Name, Password).
+-   **Task Management**:
+    -   **Add Task**: Quick-add with auto-focus.
+    -   **Board View**: Drag-and-drop support (UI ready).
+    -   **Search & Filter**: Real-time filtering by status (Pending/Completed).
+-   **Security**: Logout flow with secure cookie clearing.
+
+### 🔒 Security & Scalability
+-   **Password Hashing**: Implemented using `bcryptjs`.
+-   **Secure Tokens**: JWTs stored in `HttpOnly` cookies to prevent XSS.
+-   **Scalable Structure**: Service-Controller pattern for easy backend expansion.
+
 ---
 
 ## ⚡ Quick Start (Run Locally)
@@ -53,25 +95,7 @@ Open your browser and go to:
 
 ---
 
-## ✅ Assignment Deliverables Checklist
 
-- [x] **Frontend**: Built with **Next.js 14**, **TailwindCSS**, and **TypeScript**.
-- [x] **Responsive Design**: Fully optimized for Mobile, Tablet, and Desktop.
-- [x] **Authentication**:
-    -   Secure **JWT-based** Login & Registration.
-    -   **Protected Routes** (Dashboard requires login).
-    -   10-minute **Inactivity Auto-Logout**.
-- [x] **Dashboard**:
-    -   **Drag & Drop** Kanban Board (Pending <-> Completed).
-    -   **CRUD Operations**: Create, Read, Update, Delete tasks.
-    -   **Search & Filter**: Real-time filtering by status and text.
-    -   **User Profile**: Update Name, Email, Password.
-- [x] **Backend**:
-    -   **Node.js & Express** API.
-    -   **MongoDB** Database with Mongoose schemas.
-    -   **Security**: bcrypt password hashing, HTTP-only cookies, CORS protection.
-
----
 
 ## 📈 Scalability Architecture (Project Note)
 
