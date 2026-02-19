@@ -37,6 +37,18 @@
     -   Fixed `Button.tsx` type errors.
     -   Ensured `About` links open in a new tab.
     -   Hardened `AuthContext` to handle slow connections gracefully.
+    -   Ensure cookies are configured correctly for cross-origin requests.
+
+### Day 4: Final Polish & UI Refinements
+-   **Hero Section**:
+    -   Adjusted landing page layout for better responsiveness.
+    -   Restored original container padding based on design reference.
+    -   Updated typography colors to match the desired brand aesthetic ("Manage tasks with" in primary color).
+-   **Navigation**:
+    -   Excluded the Dashboard sidebar from the Landing Page for a cleaner public view.
+    -   Fixed scroll behavior on "Tasks" link to prevent jarring jumps.
+-   **Documentation**:
+    -   Finalized `PROJECT_LOG.md` and `README.md` for submission.
 
 ---
 

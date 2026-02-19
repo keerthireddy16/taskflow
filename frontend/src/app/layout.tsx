@@ -31,6 +31,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const isPublicPage = pathname === '/' || pathname === '/login' || pathname === '/register';
+  const hideSidebar = isPublicPage;
 
   const [showSlowLoadingMessage, setShowSlowLoadingMessage] = useState(false);
 
@@ -42,7 +43,13 @@ function AppContent({ children }: { children: React.ReactNode }) {
     return () => clearTimeout(timer);
   }, [loading]);
 
-  if (loading) {
+  // Create a more robust check for protected routes
+  const isProtectedRoute = pathname?.startsWith('/dashboard') || pathname?.startsWith('/profile');
+
+  // We only want to block rendering with the global spinner if the user is trying to access
+  // a protected route while we don't know their auth status yet.
+  // This ensures Public pages (/, /login, /register) and 404s load INSTANTLY.
+  if (loading && isProtectedRoute) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-950">
         <motion.div
@@ -70,10 +77,10 @@ function AppContent({ children }: { children: React.ReactNode }) {
         />
       )}
 
-      <main className={`flex-1 transition-all duration-500 ease-in-out ${!isPublicPage && user ? (collapsed ? 'lg:pl-20' : 'lg:pl-64') : ''}`}>
+      <main className={`flex-1 transition-all duration-500 ease-in-out ${!hideSidebar && user ? (collapsed ? 'lg:pl-20' : 'lg:pl-64') : ''}`}>
 
         {/* Mobile Header (Only visible on small screens when logged in) */}
-        {!isPublicPage && user && (
+        {!hideSidebar && user && (
           <div className="md:hidden h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 backdrop-blur-xl sticky top-0 z-30">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
@@ -87,20 +94,10 @@ function AppContent({ children }: { children: React.ReactNode }) {
           </div>
         )}
 
-        <div className={!isPublicPage && user ? "container p-4 md:p-10 max-w-7xl mx-auto min-h-[calc(100vh-4rem)] md:min-h-screen" : "min-h-screen bg-white dark:bg-slate-950"}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={pathname}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-            >
-              <ProtectedRoute>
-                {children}
-              </ProtectedRoute>
-            </motion.div>
-          </AnimatePresence>
+        <div className={!hideSidebar && user ? "container p-4 md:p-10 max-w-7xl mx-auto min-h-[calc(100vh-4rem)] md:min-h-screen" : "min-h-screen bg-white dark:bg-slate-950"}>
+          <ProtectedRoute>
+            {children}
+          </ProtectedRoute>
         </div>
       </main>
     </div>

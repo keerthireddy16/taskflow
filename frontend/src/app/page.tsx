@@ -80,7 +80,7 @@ export default function LandingPage() {
                         transition={{ delay: 0.1 }}
                         className="text-6xl md:text-8xl font-display font-bold text-zinc-900 dark:text-white tracking-tighter leading-[0.9]"
                     >
-                        Manage projects with <span className="text-zinc-400">absolute precision.</span>
+                        Manage tasks with <span className="text-zinc-400">absolute precision.</span>
                     </motion.h1>
 
                     <motion.p

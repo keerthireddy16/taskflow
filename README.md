@@ -1,10 +1,10 @@
-# TaskFlow: Professional Task Management Ecosystem
+# TaskFlow: Frontend Developer Intern Assignment
 
-# TaskFlow - Modern Productivity Dashboard
-
-TaskFlow is a robust, full-stack productivity application featuring Drag & Drop task management, JWT authentication, and a premium responsive design. Built for the Frontend Developer Intern assignment.
-
-**Live Demo:** [https://taskflow-delta.vercel.app/](https://taskflow-delta.vercel.app/)
+> [!IMPORTANT]
+> **⚠️ PLEASE RUN LOCALLY (DO NOT USE LIVE DEMO)**
+>
+> The live deployment may experience timeouts or require frequent refreshing due to free-tier hosting limits.
+> **Please run the project locally** using the instructions below for the intended full-stack experience.
 
  Note: Due to Render's free-tier cold start behavior, the backend may take a few seconds to respond on the first request. If the login/register page appears delayed initially, a quick refresh resolves it.
 
@@ -13,7 +13,47 @@ This is a full-stack application.
 You must run Backend and Frontend in two separate terminals
 ---
 
-## 🚀 Features Checklist (Assignment Deliverables)
+## ⚡ Quick Start (Run Locally)
+
+This is a full-stack application. You need to run the **Backend** and **Frontend** in **two separate terminals**.
+
+### Terminal 1: Backend
+1.  Navigate to the backend folder:
+    ```bash
+    cd backend
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+3.  Start the server:
+    ```bash
+    npm run dev
+    ```
+    *(You should see "Server running on port 5000" and "MongoDB Connected")*
+
+### Terminal 2: Frontend
+1.  Open a **new** terminal and navigate to the frontend folder:
+    ```bash
+    cd frontend
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+3.  Start the app:
+    ```bash
+    npm run dev
+    ```
+    *(Wait for "Ready in ...ms")*
+
+### Access the App
+Open your browser and go to:
+👉 **[http://localhost:3000](http://localhost:3000)**
+
+---
+
+## ✅ Assignment Deliverables Checklist
 
 - [x] **Frontend**: Built with **Next.js 14**, **TailwindCSS**, and **TypeScript**.
 - [x] **Responsive Design**: Fully optimized for Mobile, Tablet, and Desktop.
@@ -25,11 +65,19 @@ You must run Backend and Frontend in two separate terminals
     -   **Drag & Drop** Kanban Board (Pending <-> Completed).
     -   **CRUD Operations**: Create, Read, Update, Delete tasks.
     -   **Search & Filter**: Real-time filtering by status and text.
-    -   **User Profile**: Display dynamic user name/email.
+    -   **User Profile**: Update Name, Email, Password.
 - [x] **Backend**:
     -   **Node.js & Express** API.
     -   **MongoDB** Database with Mongoose schemas.
     -   **Security**: bcrypt password hashing, HTTP-only cookies, CORS protection.
+
+---
+
+## 📈 Scalability Architecture (Project Note)
+
+The application architecture is strictly **Stateless and Decoupled**. By storing session state in JWTs and delivering them via server-managed cookies, the application tier can scale horizontally across multiple instances (e.g., using a Load Balancer and Docker/Kubernetes) without requiring shared session storage or "sticky sessions."
+
+A **Service Layer Pattern** was implemented in the backend to separate request handling from business logic. This modularity ensures that as the codebase grows, adding support for new database types or complex third-party integrations (like WebSockets or Caching layers) requires zero modification to the controller or routing layers. Furthermore, the use of **Axios Interceptors** on the frontend provides a centralized bottleneck for monitoring API latency and handling automated token refreshes or global error redirection in a high-traffic production environment.
 
 ---
 
@@ -40,6 +88,7 @@ You must run Backend and Frontend in two separate terminals
 - **Styling**: Tailwind CSS
 - **Networking**: Axios (with custom Interceptors)
 - **State Management**: React Context API
+- **Animations**: Framer Motion
 
 ### Backend
 - **Environment**: Node.js & Express
@@ -70,58 +119,9 @@ taskflow/
 
 ---
 
-## ⚙️ Setup Instructions
+## 🔌 API Documentation
 
-### Prerequisites
-- Node.js (v18.x or later)
-- MongoDB
-
-### 1. Repository Setup
-```bash
-git clone <repository-url>
-cd intern_project
-```
-
-### 2. Backend Configuration
-```bash
-cd backend
-npm install
-```
-Create a `.env` file in `/backend`:
-```env
-PORT=5000
-MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
-NODE_ENV=development
-```
-`npm run dev` (API starts on port 5000)
-
-### 3. Frontend Configuration
-```bash
-cd ../frontend
-npm install
-```
-Create a `.env.local` file in `/frontend`:
-```env
-NEXT_PUBLIC_API_URL=http://localhost:5000/api
-```
-`npm run dev` (App starts on port 3000)
-
----
-
-## 🔌 API Endpoints Summary
-
-### Authentication (Standardized Response: `{ success, data }`)
-- `POST /api/auth/register` - Create account & set secure cookie
-- `POST /api/auth/login` - Authenticate & set secure cookie
-- `POST /api/auth/logout` - Clear secure cookie
-- `GET /api/auth/me` - Fetch authenticated user data
-
-### Tasks
-- `GET /api/tasks` - Retrieve tasks for the current user
-- `POST /api/tasks` - Create a new task
-- `PUT /api/tasks/:id` - Update task content/status
-- `DELETE /api/tasks/:id` - Delete task
+Detailed API documentation is available in [API_DOCUMENTATION.md](./API_DOCUMENTATION.md).
 
 ---
 
@@ -132,38 +132,3 @@ TaskFlow implements enterprise-standard security patterns:
 *   **CSRF Protection**: Native `SameSite: Strict` cookie attributes prevent unauthorized cross-site requests.
 *   **Backend Hardening**: Integrated `helmet.js` for security headers and `express-validator` for strict schema validation.
 *   **Stateless Scaling**: Authentication is managed via decentralized token verification, allowing for seamless horizontal scaling.
-
----
-
-## � Deployment & Updates
-
-This project is configured for **Continuous Deployment**.
-
-1.  **Vercel (Frontend)**: Automatically rebuilds and deploys whenever you push changes to the `main` branch.
-2.  **Render (Backend)**: Automatically redeploys whenever you push changes to the `main` branch.
-
-**To deploy updates:**
-Simply commit and push your changes:
-```bash
-git add .
-git commit -m "your message"
-git push
-```
-*Wait ~2-3 minutes for the changes to go live.*
-
----
-The application architecture is strictly **Stateless and Decoupled**. By storing session state in JWTs and delivering them via server-managed cookies, the application tier can scale horizontally across multiple instances (e.g., using a Load Balancer and Docker/Kubernetes) without requiring shared session storage or "sticky sessions."
-
-A **Service Layer Pattern** was implemented in the backend to separate request handling from business logic. This modularity ensures that as the codebase grows, adding support for new database types or complex third-party integrations (like WebSockets or Caching layers) requires zero modification to the controller or routing layers. Furthermore, the use of **Axios Interceptors** on the frontend provides a centralized bottleneck for monitoring API latency and handling automated token refreshes or global error redirection in a high-traffic production environment.
-
----
-
-## 🔮 Future Improvements
-
-1.  **Redis Caching**: Implementing Redis for high-speed retrieval of frequently accessed task lists.
-2.  **WebSockets (Socket.io)**: Real-time synchronization of task updates across multiple devices.
-3.  **Advanced RBAC**: Fine-grained Role-Based Access Control for team collaborative workspaces.
-4.  **Unit & Integration Testing**: Implementing Jest/Supertest for 100% logic coverage in the Service layer.
-
----
-**Reviewer Note**: *This implementation prioritizes architectural cleanlines and security (cookie-based auth) over basic MVP functionality, demonstrating professional-grade engineering foresight.*

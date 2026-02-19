@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import api from '../../services/api';
 import { toast } from 'react-toastify';
 import {
@@ -19,7 +19,8 @@ import {
     X,
     TrendingUp,
     LayoutGrid,
-    Target
+    Target,
+    CheckSquare // Import CheckSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -40,10 +41,30 @@ import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea
 export default function Dashboard() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const taskInputRef = useRef<HTMLInputElement>(null);
 
     // State
     const [tasks, setTasks] = useState<Task[]>([]);
     const [newTask, setNewTask] = useState('');
+    // ... existing state
+
+    // ... existing useEffects
+
+    // Add effect to handle view=tasks param
+    useEffect(() => {
+        if (searchParams.get('view') === 'tasks') {
+            setTimeout(() => {
+                taskInputRef.current?.focus();
+                taskInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100); // Small delay to ensure render
+        }
+    }, [searchParams]);
+
+    // ... existing fetchTasks and handlers
+
+
+
     const [searchTerm, setSearchTerm] = useState('');
     const [filter, setFilter] = useState<'all' | 'pending' | 'completed'>('all');
     const [editingTask, setEditingTask] = useState<Task | null>(null);
@@ -186,7 +207,7 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="max-w-6xl mx-auto py-8 px-4 space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div key={searchParams.toString() || 'dashboard'} className="max-w-6xl mx-auto py-8 px-4 space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Header */}
             <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="space-y-1">
@@ -206,7 +227,17 @@ export default function Dashboard() {
                     >
                         {viewMode === 'list' ? 'Board View' : 'List View'}
                     </Button>
-                    {/* "New Project" button removed as per user request */}
+                    <Button
+                        variant="primary"
+                        icon={<Plus size={18} />}
+                        className="rounded-2xl"
+                        onClick={() => {
+                            taskInputRef.current?.focus();
+                            taskInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }}
+                    >
+                        Add task
+                    </Button>
                 </div>
             </header>
 
@@ -276,6 +307,7 @@ export default function Dashboard() {
                 {/* Quick Add Form */}
                 <form onSubmit={handleAddTask} className="relative group">
                     <Input
+                        ref={taskInputRef}
                         placeholder="What needs to be done? Press Enter to add."
                         value={newTask}
                         onChange={(e) => setNewTask(e.target.value)}

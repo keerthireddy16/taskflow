@@ -20,7 +20,8 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
         }
     }, [user, loading, router, pathname]);
 
-    if (loading) {
+    const isPublicPage = ['/', '/login', '/register'].includes(pathname || '');
+    if (loading && !isPublicPage) {
         return (
             <div className="h-screen flex items-center justify-center bg-zinc-950">
                 <div className="flex flex-col items-center gap-4">

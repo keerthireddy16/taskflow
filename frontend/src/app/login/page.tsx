@@ -27,7 +27,7 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 relative">
+        <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-950 p-4 relative">
             {/* Home Link */}
             <Link
                 href="https://taskflow-delta.vercel.app/"
@@ -54,7 +54,7 @@ export default function LoginPage() {
                 </motion.div>
             </button>
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full max-w-[500px]"
             >

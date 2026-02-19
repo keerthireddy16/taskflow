@@ -101,13 +101,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             await api.post('/auth/logout');
             setUser(null);
-            router.push('/login');
+            router.push('/');
             toast.info('Logged out safely');
         } catch (error) {
             console.error('Logout failed', error);
             // Even if API fails, clear local state
             setUser(null);
-            router.push('/login');
+            router.push('/');
         }
     };
 

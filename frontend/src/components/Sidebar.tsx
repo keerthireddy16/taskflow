@@ -2,7 +2,9 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
+
+
 import {
     LayoutDashboard,
     CheckSquare,
@@ -36,11 +38,13 @@ export default function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobile
     const pathname = usePathname();
     const { user, logout } = useAuth();
     const { theme, toggleTheme } = useTheme();
+    const searchParams = useSearchParams();
+    const currentView = searchParams.get('view');
 
     if (!user) return null;
 
     const navItems = [
-        { label: 'Home', href: 'https://taskflow-delta.vercel.app/', icon: Home, external: true }, // Add Home Link
+        { label: 'Home', href: '/', icon: Home }, // Internal Home Link
         { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
         { label: 'Tasks', href: '/dashboard?view=tasks', icon: CheckSquare },
         { label: 'Analytics', href: '#', icon: BarChart3, onClick: () => toast.info('Analytics coming soon!') },
@@ -111,8 +115,19 @@ export default function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobile
                 {/* Navigation */}
                 <nav className="p-4 space-y-2 mt-4">
                     {navItems.map((item) => {
-                        const isActive = pathname === item.href;
+                        // Determine active state based on path and query params
+                        let isActive = false;
+                        if (item.href === '/dashboard?view=tasks') {
+                            isActive = pathname === '/dashboard' && currentView === 'tasks';
+                        } else if (item.href === '/dashboard') {
+                            isActive = pathname === '/dashboard' && !currentView;
+                        } else {
+                            isActive = pathname === item.href;
+                        }
+
                         const Icon = item.icon;
+                        // ... rest of the map function remains the same (I need to check if I can just replace the logic part)
+
 
                         // If it has an onClick, render as button (or link that prevents default)
                         if (item.onClick) {
@@ -142,34 +157,13 @@ export default function Sidebar({ collapsed, setCollapsed, mobileOpen, setMobile
                             );
                         }
 
-                        // External Link for Home
-                        if (item.external) {
-                            return (
-                                <Link
-                                    key={item.label}
-                                    href={item.href}
-                                    onClick={() => setMobileOpen(false)}
-                                    className={cn(
-                                        'flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group relative',
-                                        // Highlight if exactly matching current URL (unlikely for external) or manually if needed
-                                        'text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-900/50'
-                                    )}
-                                >
-                                    <Icon
-                                        size={20}
-                                        className="transition-transform duration-300 group-hover:scale-110"
-                                    />
-                                    {(!collapsed || mobileOpen) && (
-                                        <span className="text-sm font-semibold tracking-tight">{item.label}</span>
-                                    )}
-                                </Link>
-                            );
-                        }
+
 
                         return (
                             <Link
                                 key={item.label}
                                 href={item.href}
+                                scroll={false} // Prevent scrolling to top on navigation
                                 onClick={() => setMobileOpen(false)}
                                 className={cn(
                                     'flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group relative',
